@@ -15,3 +15,26 @@ export function Measurements() {
   return ()=>{document.removeEventListener('click',click);observer.disconnect();};
  },[]);return null;
 }
+
+/** Progressive enhancement: every element is visible before JS and on failure. */
+export function ArtMotion() {
+ useEffect(() => {
+  const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (!('IntersectionObserver' in window)) return;
+  const elements = [...document.querySelectorAll<HTMLElement>('[data-reveal], .brush')];
+  const observer = new IntersectionObserver(entries => {
+   for (const entry of entries) if (entry.isIntersecting) {
+    entry.target.classList.add('has-entered');
+    observer.unobserve(entry.target);
+   }
+  }, { threshold: 0.08 });
+  const sync = () => {
+   observer.disconnect();
+   if (preference.matches) elements.forEach(el => el.classList.remove('has-entered'));
+   else elements.forEach(el => { if (!el.classList.contains('has-entered')) observer.observe(el); });
+  };
+  sync(); preference.addEventListener('change', sync);
+  return () => { observer.disconnect(); preference.removeEventListener('change', sync); };
+ }, []);
+ return null;
+}
