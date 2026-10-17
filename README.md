@@ -1,6 +1,6 @@
 # Vino Tobar — site artístico
 
-Next.js 16.4.2, App Router, TypeScript e CSS. Desenvolvimento na branch `feat/artistic-experience`. Não publicado em produção; domínio e Vercel não foram alterados.
+Next.js 16.4.2, App Router, TypeScript e CSS. Adaptado para GitHub Pages a partir da main. Destino: https://rsemsaco.github.io/vino_tobar_site/. O status de cada publicação é verificável em Actions e em `/vino_tobar_site/deployment.txt`. Nenhuma configuração Vercel ou domínio personalizado é necessária.
 
 ## Executar e revisar
 
@@ -11,16 +11,16 @@ npm ci
 npm run dev
 ```
 
-Abra http://localhost:3000. Para revisão do build:
+Abra http://localhost:3000/vino_tobar_site/. Para revisão do build:
 
 ```sh
 npm test
 npm run typecheck
 npm run build
-npm start
+npm run verify:export
 ```
 
-A prévia é local. Não é um endereço hospedado. Confira 360, 390, 768 e 1440 px antes da publicação. Não há configuração de contas, deploy ou integração externa automática neste projeto.
+`npm run build` gera `out/index.html`. Para prévia de produção, sirva `out` sob `/vino_tobar_site/` com qualquer servidor HTTP estático. `next start` não serve exportações estáticas. Confira 360, 390, 768 e 1440 px. O workflow publica automaticamente a cada push na main e também aceita execução manual.
 
 ## Estrutura
 
@@ -36,11 +36,11 @@ A prévia é local. Não é um endereço hospedado. Confira 360, 390, 768 e 1440
 
 ## Agenda
 
-A rota principal é dinâmica: eventos passados são removidos a cada requisição. As datas devem conter offset explícito (ex. `-03:00`), e são exibidas em `America/Sao_Paulo`. Uma experiência já iniciada não é listada como próxima. Não há reserva automática.
+A agenda usa dados estáticos versionados em `content/site.ts`. Cada atualização na main gera um novo deploy; no navegador, eventos passados são removidos ao abrir a página, a cada 30 segundos e ao retornar à aba. Sem JavaScript, permanece o convite para consulta, sem divulgar agenda desatualizada. As datas devem conter offset explícito (ex. `-03:00`), e são exibidas em `America/Sao_Paulo`. Uma experiência já iniciada não é listada como próxima. Não há reserva automática.
 
 ## Referências de implementação
 
 - https://nextjs.org/docs/app/getting-started/installation
 - https://developers.google.com/search/docs/appearance/structured-data/local-business
 
-Não há dados estruturados de ofertas, produtos ou eventos pendentes. Canonical, sitemap, imagem social e indexação devem ser configurados após confirmação da URL pública e autorizações de imagem.
+Não há dados estruturados de ofertas, produtos ou eventos pendentes. Canonical, sitemap e metadados usam a URL real do Pages. Uma imagem social depende da confirmação de autorização específica. Leia `docs/PAGES.md` para publicação e operação.

@@ -1,4 +1,6 @@
-# Verificação — 17/10/2026
+# Verificação inicial — 17/10/2026
+
+Registro histórico da primeira entrega. A adaptação posterior ao Pages está documentada em `PAGES.md`; as observações abaixo descrevem a versão original.
 
 ## Estado do repositório
 

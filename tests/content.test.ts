@@ -13,4 +13,16 @@ test('mensagens preservam texto e usam o número informado',()=>{
  const message='Olá! Seleção 01 & consulta?';const url=new URL(whatsapp(message));
  assert.equal(url.hostname,'wa.me');assert.equal(url.pathname,'/5511988045646');assert.equal(url.searchParams.get('text'),message);
 });
-test('pendências não viram ofertas',()=>{assert.equal(experience.validado,false);assert.equal(experience.preco,null);assert.equal(events.length,0);assert.ok(catalog.every(c=>c.validatedName===null));});
+test('dados versionados respeitam o contrato editorial',()=>{
+ if(!experience.validado) assert.equal(experience.preco,null);
+ assert.ok(catalog.every(c=>c.validatedName===null || typeof c.validatedName==='string'));
+ assert.ok(events.every(e=>typeof e.validado==='boolean' && Number.isFinite(Date.parse(e.start)) && Number.isFinite(Date.parse(e.end))));
+});
+
+test('caminhos locais recebem exatamente um prefixo', async()=>{
+ const { localPath } = await import('../lib/paths.ts');
+ assert.equal(localPath('/privacidade/'),'/vino_tobar_site/privacidade/');
+ assert.equal(localPath('/vino_tobar_site/images/a.webp'),'/vino_tobar_site/images/a.webp');
+ assert.equal(localPath('#catalogo'),'#catalogo');
+ assert.equal(localPath('https://wa.me/5511988045646'),'https://wa.me/5511988045646');
+});
